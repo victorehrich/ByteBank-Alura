@@ -2,6 +2,7 @@
 using ByteBank.Sistemas;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,9 +13,53 @@ namespace ByteBank
     {
         static void Main(string[] args)
         {
-            UsarSistema();
+            CarregarContas();
+            //TestaInnerException();
+            //UsarSistema();
             //CalcularBonificacao();
             Console.ReadLine();
+        }
+
+        private static void CarregarContas()
+        {
+            using (LeitorDeArquivos leitor = new LeitorDeArquivos("contas.txt"))
+            {
+                leitor.LerProximaLinha();
+
+            }
+            //try
+            //{
+            //    leitor.LerProximaLinha();
+            //}
+            //catch(IOException ex)
+            //{
+            //    Console.WriteLine(ex);
+            //}
+            //finally 
+            //{
+            //}
+
+        }
+
+        private static void TestaInnerException()
+        {
+            try
+            {
+                ContaCorrente conta = new ContaCorrente(1, 1);
+                ContaCorrente conta2 = new ContaCorrente(2, 2);
+                conta.Transferir(1000, conta2);
+                conta.Sacar(101);
+            }
+            catch (OperaçãoFinanceiraException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.InnerException.Message);
+
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         private static void UsarSistema()
